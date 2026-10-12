@@ -1,0 +1,120 @@
+{
+  "manifest_version": 3,
+  "name": "Context Candy — AI Wrapper",
+  "version": "1.0.0",
+  "description": "Context Candy: For your AI agents. Wrap, secure, and seamlessly unwrap multimodal context across Claude, Gemini, ChatGPT, Perplexity, and Groq.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "context-candy@wrapper.local"
+    }
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "clipboardWrite",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://claude.ai/*",
+    "https://*.claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://*.perplexity.ai/*",
+    "https://groq.com/*",
+    "https://chat.groq.com/*",
+    "https://*.oaiusercontent.com/*",
+    "https://*.oaistatic.com/*",
+    "https://*.googleusercontent.com/*",
+    "https://*.anthropic.com/*",
+    "*://*/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Context Candy — AI Wrapper",
+    "default_icon": {
+      "16": "icons/candy16.png",
+      "32": "icons/candy32.png",
+      "48": "icons/candy48.png",
+      "128": "icons/candy128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "icons/candy16.png",
+    "32": "icons/candy32.png",
+    "48": "icons/candy48.png",
+    "128": "icons/candy128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://*.perplexity.ai/*",
+        "https://groq.com/*",
+        "https://chat.groq.com/*"
+      ],
+      "js": [
+        "content/page_bridge.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://*.perplexity.ai/*",
+        "https://groq.com/*",
+        "https://chat.groq.com/*"
+      ],
+      "js": [
+        "lib/crypto.js",
+        "lib/db.js",
+        "lib/token_estimator.js",
+        "adapters/selector_config.js",
+        "adapters/media_extractor.js",
+        "adapters/dom_health.js",
+        "adapters/claude_adapter.js",
+        "adapters/gemini_adapter.js",
+        "adapters/chatgpt_adapter.js",
+        "adapters/perplexity_adapter.js",
+        "adapters/groq_adapter.js",
+        "adapters/adapter_manager.js",
+        "engine/capsule_engine.js",
+        "engine/prompt_tuner.js",
+        "engine/injector.js",
+        "content/widget.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/page_bridge.js",
+        "content/widget.css",
+        "fonts/*",
+        "icons/*.png",
+        "icons/*.svg"
+      ],
+      "matches": [
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://*.perplexity.ai/*",
+        "https://groq.com/*",
+        "https://chat.groq.com/*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Context Candy</title>
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const theme = saved ? saved : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="header-brand">
+        <img src="../icons/candy48.png" class="brand-icon" alt="Context Candy">
+        <div class="brand-text">
+          <span class="brand-title">Context Candy</span>
+          <span class="brand-subtitle">Data transfer between your AI agents</span>
+        </div>
+      </div>
+      <div class="header-controls">
+        <!-- Sleek Theme Toggle Switch -->
+        <button role="switch" class="theme-switch" id="sky-theme-toggle" aria-checked="false" aria-label="Toggle dark and light mode" data-state="night" title="Toggle theme">
+          <span class="theme-switch-track">
+            <span class="theme-switch-thumb">
+              <svg class="thumb-icon icon-sun" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+              </svg>
+              <svg class="thumb-icon icon-moon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+              </svg>
+            </span>
+          </span>
+        </button>
+
+        <!-- Active Model Platform Indicator (Clean plain text without dot or box) -->
+        <div class="header-status-wrap">
+          <span id="active-tab-platform-badge" class="platform-indicator">Detecting...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="popup-nav">
+      <button class="nav-tab active" data-tab="handoff-tab">Handoff</button>
+      <button class="nav-tab" data-tab="capsules-tab">Vault</button>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="popup-toast" class="popup-toast hidden"></div>
+
+    <!-- Main Content Area -->
+    <main class="popup-main">
+      <!-- Tab 1: Context Handoff (Primary) -->
+      <section id="handoff-tab" class="tab-content active">
+        <!-- Top Action Grid: Left Wrap, Right Unwrap -->
+        <div class="panel actions-panel">
+          <div class="actions-grid">
+            <button class="btn btn-primary btn-action" id="btn-wrap-popup">
+              <span class="btn-label">Wrap Session</span>
+              <span class="btn-subtext" id="wrap-subtext">Save active chat</span>
+            </button>
+            <button class="btn btn-secondary btn-action" id="btn-unwrap-popup">
+              <span class="btn-label">Unwrap Session</span>
+              <span class="btn-subtext">Upload to active chat</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Copy Handoff Action (Under top row) -->
+        <div class="panel copy-action-panel">
+          <button class="btn btn-secondary btn-block btn-copy-full" id="btn-copy-popup">
+            <span class="btn-label">Copy Handoff</span>
+            <span class="btn-subtext">Copy handoff prompt to clipboard</span>
+          </button>
+        </div>
+
+        <!-- Session Configuration Panel -->
+        <div class="panel config-panel">
+          <div class="form-group">
+            <label class="form-label" for="session-name-input-popup">Give your session a name</label>
+            <input type="text" class="input-field" id="session-name-input-popup" value="Candy Context" placeholder="Candy Context">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="capsule-picker-select-popup">Saved Session to Unwrap</label>
+            <select class="select-field" id="capsule-picker-select-popup">
+              <option value="">(Loading stored sessions...)</option>
+            </select>
+          </div>
+
+          <!-- Hidden select to preserve JS references -->
+          <select class="hidden-select" id="target-format-select-popup" style="display:none;" aria-hidden="true">
+            <option value="universal" selected>Universal</option>
+          </select>
+
+          <!-- Selective Turn & Media Inspector -->
+          <details class="selective-picker" id="selective-picker-details">
+            <summary class="selective-summary">Selective Turn & Media Inspector</summary>
+            <div class="selective-list" id="selective-items-list-popup">
+              <div class="empty-hint">
+                Select a saved session above to inspect and filter specific turns or attachments.
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Compact Estimated Tokens (Under that) -->
+        <div class="panel token-estimate-panel" id="token-card">
+          <div class="token-estimate-row">
+            <span class="token-estimate-label">Estimated Tokens:</span>
+            <span class="token-estimate-value" id="token-estimate-value">Select or wrap to estimate</span>
+          </div>
+          <span id="token-estimate-detail" style="display: none;"></span>
+        </div>
+        <div class="media-disclaimer-note">
+          Media and documents are not transferred automatically. You have to inject or attach them next time when talking with the destination AI agent.
+        </div>
+      </section>
+
+      <!-- Tab 2: Vault Management -->
+      <section id="capsules-tab" class="tab-content">
+        <div class="panel vault-toolbar-panel">
+          <div class="toolbar">
+            <label class="btn btn-secondary btn-file">
+              Import Bundle
+              <input type="file" id="import-file-input" accept=".json" style="display: none;">
+            </label>
+            <button class="btn btn-secondary" id="btn-refresh">Refresh</button>
+          </div>
+        </div>
+
+        <div class="panel storage-panel">
+          <div class="storage-info">
+            <span class="storage-label">Storage Footprint</span>
+            <div class="storage-data">
+              <span class="storage-val" id="storage-size-val">0 KB</span>
+              <span class="storage-cap" id="storage-cap-val">(0 candies)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="capsules-list" id="capsules-list-container">
+          <div class="empty-state">Loading stored sessions...</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Confirmation Modal Dialog -->
+    <div id="confirm-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <h3 class="modal-title" id="confirm-modal-title">Delete Candy</h3>
+        <p class="modal-message" id="confirm-modal-message">Are you sure you want to delete this candy?</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-btn" id="confirm-modal-cancel">Cancel</button>
+          <button type="button" class="btn btn-danger modal-btn" id="confirm-modal-confirm">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../lib/crypto.js"></script>
+  <script src="../lib/token_estimator.js"></script>
+  <script src="../lib/db.js"></script>
+  <script src="../engine/capsule_engine.js"></script>
+  <script src="../engine/prompt_tuner.js"></script>
+  <script src="../engine/injector.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
