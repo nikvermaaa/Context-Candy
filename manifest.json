@@ -77,7 +77,6 @@
         "https://chat.groq.com/*"
       ],
       "js": [
-        "lib/crypto.js",
         "lib/db.js",
         "lib/token_estimator.js",
         "adapters/selector_config.js",

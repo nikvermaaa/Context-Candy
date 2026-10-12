@@ -2,7 +2,7 @@
  * popup/popup.js
  * Context Candy — Full Extension Dashboard.
  * Handles Wrapping from active tab, Prompt Tuning, In-chat Unwrapping,
- * Vault storage management, Web Crypto encryption, and settings.
+ * Vault storage management, session handoff, and theme toggle.
  */
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';

@@ -68,7 +68,8 @@ Live token counter calibrated against each provider's tokenizer:
 
 ### 7. Security & Client-Side Privacy
 - **100% Local-First**: No remote telemetry, no external servers, and no tracking. All data is processed directly inside your browser.
-- **Web Crypto Encryption**: Optional AES-GCM-256 passphrase encryption at rest within IndexedDB.
+- **Client-Side Storage**: All conversations and metadata reside safely in your private IndexedDB.
+- **Zero API Keys Required**: No third-party accounts or sensitive API keys needed.
 
 ---
 
@@ -166,7 +167,6 @@ context-candy/
 │   ├── prompt_tuner.js        # Target-specific formatting rules
 │   └── injector.js            # Text typing and file drop simulation
 ├── lib/                       # Core utility modules
-│   ├── crypto.js              # Web Crypto AES-GCM-256 encryption
 │   ├── db.js                  # IndexedDB persistent storage engine
 │   └── token_estimator.js     # Provider-calibrated token estimator
 ├── fonts/                     # Bundled web fonts
@@ -186,7 +186,7 @@ context-candy/
 - **No Remote Servers**: Context Candy operates entirely in your browser. No data, analytics, or telemetry are transmitted to third-party endpoints.
 - **Scoped Host Permissions**: The extension only activates on authorized AI platform domains.
 - **Safe at Rest**: All conversation history is stored strictly in your browser's private IndexedDB storage.
-- **Passphrase Encryption**: Encrypt your Vault using standard Web Crypto AES-GCM-256.
+- **Zero Hallucination Risk**: Verbatim turns and direct code artifacts—no uncontrolled background transformations.
 
 ---
 
