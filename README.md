@@ -12,10 +12,6 @@
   </p>
 </div>
 
-<p align="center">
-  <img src="icons/context_candy_banner.png" alt="Context Candy Banner" width="780" />
-</p>
-
 ---
 
 ## Overview
